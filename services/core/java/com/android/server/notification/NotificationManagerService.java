@@ -232,6 +232,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
@@ -1242,7 +1243,12 @@ public class NotificationManagerService extends SystemService {
             }
             if (uri == null || NOTIFICATION_SOUND_VIB_SCREEN_ON.equals(uri)) {
                 mSoundVibScreenOn = Settings.System.getIntForUser(resolver,
-                            Settings.System.NOTIFICATION_SOUND_VIB_SCREEN_ON, 1, UserHandle.USER_CURRENT) != 0;
+                        Settings.System.NOTIFICATION_SOUND_VIB_SCREEN_ON, 1, UserHandle.USER_CURRENT) != 0;
+            }
+            if (uri == null || MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD_URI.equals(uri)) {
+                mAnnoyingNotificationThreshold = Settings.System.getLongForUser(resolver,
+                       Settings.System.MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD, 30000,
+                       UserHandle.USER_CURRENT);
             }
         }
     }
