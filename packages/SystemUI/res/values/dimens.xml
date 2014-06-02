@@ -513,6 +513,9 @@
     <!-- Distance between notifications and header when they are considered to be colliding. -->
     <dimen name="header_notifications_collide_distance">48dp</dimen>
 
+    <!-- The height of the collapsed speed bump view. -->
+    <dimen name="speed_bump_height_collapsed">24dp</dimen>
+
     <!-- Distance the user needs to drag vertically such that a swipe is accepted to unlock the
          device. -->
     <dimen name="unlock_move_distance">75dp</dimen>
