@@ -25,6 +25,8 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.Animatable;
+import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.Drawable;
 import android.telephony.SubscriptionInfo;
 import android.util.ArraySet;
@@ -115,6 +117,7 @@ public class SignalClusterView extends LinearLayout implements NetworkController
     private boolean mBlockWifi;
     private boolean mBlockEthernet;
     private boolean mActivityEnabled;
+
     private boolean mForceBlockWifi;
     private boolean mBlockVpn;
     private boolean mBlockRoaming;
@@ -152,16 +155,6 @@ public class SignalClusterView extends LinearLayout implements NetworkController
         updateActivityEnabled();
     }
 
-    public void setForceBlockWifi() {
-        mForceBlockWifi = true;
-        mBlockWifi = true;
-        if (isAttachedToWindow()) {
-            // Re-register to get new callbacks.
-            mNetworkController.removeCallback(this);
-            mNetworkController.addCallback(this);
-        }
-    }
-
     @Override
     public void onTuningChanged(String key, String newValue) {
         if (!StatusBarIconController.ICON_BLACKLIST.equals(key)) {
@@ -183,6 +176,7 @@ public class SignalClusterView extends LinearLayout implements NetworkController
             mBlockEthernet = blockEthernet;
             mBlockWifi = blockWifi || mForceBlockWifi;
             mBlockRoaming = blockRoaming;
+
             // Re-register to get new callbacks.
             mNetworkController.removeCallback(this);
             mNetworkController.addCallback(this);
@@ -301,7 +295,7 @@ public class SignalClusterView extends LinearLayout implements NetworkController
 
     @Override
     public void setMobileDataIndicators(IconState statusIcon, IconState qsIcon, int statusType,
-            int qsType, boolean activityIn, boolean activityOut, String typeContentDescription,
+            int qsType, boolean activityIn, boolean activityOut, int volteIcon, String typeContentDescription,
             String description, boolean isWide, int subId, boolean roaming) {
         PhoneState state = getState(subId);
         if (state == null) {
@@ -312,6 +306,7 @@ public class SignalClusterView extends LinearLayout implements NetworkController
         state.mMobileTypeId = statusType;
         state.mMobileDescription = statusIcon.contentDescription;
         state.mMobileTypeDescription = typeContentDescription;
+        state.mIsMobileTypeIconWide = statusType != 0 && isWide;
         state.mRoaming = roaming;
         state.mActivityIn = activityIn && mActivityEnabled;
         state.mActivityOut = activityOut && mActivityEnabled;
@@ -616,6 +611,7 @@ public class SignalClusterView extends LinearLayout implements NetworkController
         private int mMobileStrengthId = 0, mMobileTypeId = 0;
         private int mLastMobileStrengthId = -1;
         private int mLastMobileTypeId = -1;
+        private boolean mIsMobileTypeIconWide;
         private String mMobileDescription, mMobileTypeDescription;
 
         private ViewGroup mMobileGroup;

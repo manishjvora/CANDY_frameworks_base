@@ -18,7 +18,9 @@ package com.android.systemui.statusbar;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.ContentObserver;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -27,6 +29,8 @@ import android.media.audiofx.Visualizer;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.UserHandle;
+import android.provider.Settings;
+import android.provider.Settings.Secure;
 import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
 import android.util.Log;

@@ -7,7 +7,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0accessibility_data_connection_roaming
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -309,6 +309,8 @@
     <string name="accessibility_data_three_bars">Data three bars.</string>
     <!-- Content description of the data signal when it is full for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
     <string name="accessibility_data_signal_full">Data signal full.</string>
+    <!-- Content description of the roaming data connection type for accessibility (not shown on the screen). [CHAR LIMIT=NONE] -->
+    <string name="accessibility_data_connection_roaming">Roaming</string>
 
     <!-- Content description of the wifi label showing what we are connected to. [CHAR LIMIT=NONE] -->
     <string name="accessibility_wifi_name">Connected to <xliff:g id="wifi" example="Home Network">%s</xliff:g>.</string>

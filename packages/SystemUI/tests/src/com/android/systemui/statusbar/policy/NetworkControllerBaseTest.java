@@ -46,7 +46,6 @@ import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.testing.TestableLooper;
 import android.util.Log;
-
 import com.android.internal.telephony.cdma.EriInfo;
 import com.android.settingslib.graph.SignalDrawable;
 import com.android.settingslib.net.DataUsageController;
@@ -63,6 +62,8 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

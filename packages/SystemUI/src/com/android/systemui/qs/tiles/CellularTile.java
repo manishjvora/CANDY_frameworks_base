@@ -232,16 +232,27 @@ public class CellularTile extends QSTileImpl<SignalState> {
 
     private static final class CallbackInfo {
         boolean enabled;
+        boolean wifiEnabled;
         boolean airplaneModeEnabled;
         String dataContentDescription;
         boolean activityIn;
         boolean activityOut;
+        String enabledDesc;
         boolean noSim;
+        boolean isDataTypeIconWide;
         boolean roaming;
     }
 
     private final class CellSignalCallback implements SignalCallback {
         private final CallbackInfo mInfo = new CallbackInfo();
+
+        @Override
+        public void setWifiIndicators(boolean enabled, IconState statusIcon, IconState qsIcon,
+                boolean activityIn, boolean activityOut, String description, boolean isTransient,
+                String statusLabel) {
+            mInfo.wifiEnabled = enabled;
+            refreshState(mInfo);
+        }
 
         @Override
         public void setMobileDataIndicators(IconState statusIcon, IconState qsIcon, int statusType,
@@ -255,6 +266,8 @@ public class CellularTile extends QSTileImpl<SignalState> {
             mInfo.dataContentDescription = typeContentDescription;
             mInfo.activityIn = activityIn;
             mInfo.activityOut = activityOut;
+            mInfo.enabledDesc = description;
+            mInfo.isDataTypeIconWide = qsType != 0 && isWide;
             mInfo.roaming = roaming;
             refreshState(mInfo);
         }

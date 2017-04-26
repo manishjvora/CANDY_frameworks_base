@@ -22,16 +22,21 @@ import android.media.session.MediaController;
 import android.media.session.MediaSession;
 import android.media.session.MediaSessionManager;
 import android.media.session.PlaybackState;
+import android.os.SystemClock;
 import android.os.UserHandle;
 import android.util.Log;
+import android.view.KeyEvent;
 
 import com.android.systemui.Dumpable;
 import com.android.systemui.SysUiServiceProvider;
+import com.android.systemui.statusbar.phone.StatusBar;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Handles tasks and state related to media notifications. For example, there is a 'current' media
