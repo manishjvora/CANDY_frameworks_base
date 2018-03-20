@@ -232,6 +232,7 @@ public class StatusIconContainer extends AlphaOptimizedLinearLayout {
             childState.xTranslation = translationX - getViewTotalWidth(child);
             mLayoutStates.add(0, childState);
 
+
             translationX -= getViewTotalWidth(child);
         }
 

@@ -211,7 +211,7 @@ public class StatusBarIconList {
         }
 
         /**
-         * View index is inverted from regular index, because they are laid out back-to-front
+         * View index is backwards from regular index
          * @param tag the tag of the holder being viewed
          * @return (1 + mSubSlots.size() - indexOfTag)
          */
@@ -228,27 +228,6 @@ public class StatusBarIconList {
             return subSlots - getIndexForTag(tag) - 1;
         }
 
-        /**
-         * Build a list of the {@link StatusBarIconHolder}s in the same order they appear in their
-         * view group. This provides a safe list that can be iterated and inserted into its group.
-         *
-         * @return all holders contained here, in view order
-         */
-        public List<StatusBarIconHolder> getHolderListInViewOrder() {
-            ArrayList<StatusBarIconHolder> holders = new ArrayList<>();
-            if (mSubSlots != null) {
-                for (int i = mSubSlots.size() - 1; i >= 0; i--) {
-                    holders.add(mSubSlots.get(i));
-                }
-            }
-
-            if (mHolder != null) {
-                holders.add(mHolder);
-            }
-
-            return holders;
-        }
-
         public List<StatusBarIconHolder> getHolderList() {
             ArrayList<StatusBarIconHolder> holders = new ArrayList<>();
             if (mHolder != null) {
@@ -256,9 +235,7 @@ public class StatusBarIconList {
             }
 
             if (mSubSlots != null) {
-                for (int i = 0; i < mSubSlots.size(); i++) {
-                    holders.add(mSubSlots.get(i));
-                }
+               holders.addAll(mSubSlots);
             }
 
             return holders;
@@ -274,7 +251,7 @@ public class StatusBarIconList {
                 return "";
             }
 
-            return "" + mSubSlots.size() + " " + mSubSlots;
+            return "" + mSubSlots.size() + " subSlots";
         }
     }
 }

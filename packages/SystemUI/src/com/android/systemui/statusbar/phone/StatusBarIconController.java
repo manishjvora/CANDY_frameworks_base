@@ -163,7 +163,6 @@ public interface StatusBarIconController {
                 StatusBarIconHolder holder) {
             StatusIconDisplayable view = addHolder(index, slot, blocked, holder);
             view.setStaticDrawableColor(mColor);
-            view.setDecorColor(mColor);
         }
 
         public void setTint(int color) {
@@ -292,11 +291,13 @@ public interface StatusBarIconController {
 
         private StatusBarWifiView onCreateStatusBarWifiView(String slot) {
             StatusBarWifiView view = StatusBarWifiView.fromContext(mContext, slot);
+            view.setSlot(slot);
             return view;
         }
 
         private StatusBarMobileView onCreateStatusBarMobileView(String slot) {
             StatusBarMobileView view = StatusBarMobileView.fromContext(mContext, slot);
+            view.setSlot(slot);
             return view;
         }
 

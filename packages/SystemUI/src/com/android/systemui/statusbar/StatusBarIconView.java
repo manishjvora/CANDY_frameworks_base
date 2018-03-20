@@ -889,10 +889,7 @@ public class StatusBarIconView extends AnimatedImageView implements StatusIconDi
 
     @Override
     public void onDarkChanged(Rect area, float darkIntensity, int tint) {
-        int areaTint = getTint(area, this, tint);
-        ColorStateList color = ColorStateList.valueOf(areaTint);
-        setImageTintList(color);
-        setDecorColor(areaTint);
+        setImageTintList(ColorStateList.valueOf(getTint(area, this, tint)));
     }
 
     @Override
