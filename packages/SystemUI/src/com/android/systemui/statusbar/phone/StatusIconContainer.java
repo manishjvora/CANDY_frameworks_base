@@ -49,6 +49,7 @@ public class StatusIconContainer extends AlphaOptimizedLinearLayout {
     private static final String TAG = "StatusIconContainer";
     private static final boolean DEBUG = false;
     private static final boolean DEBUG_OVERFLOW = false;
+
     // Max 8 status icons including battery
     private static final int MAX_ICONS = 7;
     private static final int MAX_DOTS = 1;

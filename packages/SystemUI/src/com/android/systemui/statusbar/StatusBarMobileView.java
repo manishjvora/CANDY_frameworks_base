@@ -283,6 +283,11 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
         return mVisibleState;
     }
 
+    @Override
+    public int getVisibleState() {
+        return 0;
+    }
+
     @VisibleForTesting
     public MobileIconState getState() {
         return mState;
