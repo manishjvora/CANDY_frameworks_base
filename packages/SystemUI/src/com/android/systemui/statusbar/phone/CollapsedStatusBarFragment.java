@@ -127,8 +127,10 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         Dependency.get(StatusBarIconController.class).addIconGroup(mDarkIconManager);
         mSystemIconArea = mStatusBar.findViewById(R.id.system_icon_area);
         mClockView = mStatusBar.findViewById(R.id.clock);
+        mCenterClockLayout = (LinearLayout) mStatusBar.findViewById(R.id.center_clock_layout);
+        mRightClock = mStatusBar.findViewById(R.id.right_clock);
+        updateSettings(false);
         showSystemIconArea(false);
-        showClock(false);
         initEmergencyCryptkeeperText();
         initOperatorName();
     }
@@ -195,7 +197,15 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
                 animateHide(mClockView, animate, false);
             } else {
                 showNotificationIconArea(animate);
-                updateClockStyle(animate);
+            }
+        }
+        // The clock may have already been hidden, but we might want to shift its
+        // visibility to GONE from INVISIBLE or vice versa
+        if ((diff1 & DISABLE_CLOCK) != 0 || mClockView.getVisibility() != clockHiddenMode()) {
+            if ((state1 & DISABLE_CLOCK) != 0) {
+                hideClock(animate);
+            } else {
+                showClock(animate);
             }
         }
     }
@@ -243,6 +253,25 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         if (mClockStyle == 2) {
             animateShow(mRightClock, animate);
         }
+    }
+
+    public void hideClock(boolean animate) {
+        animateHiddenState(mClockView, clockHiddenMode(), animate);
+    }
+
+    public void showClock(boolean animate) {
+        animateShow(mClockView, animate);
+    }
+
+    /**
+     * If panel is expanded/expanding it usually means QS shade is opening, so
+     * don't set the clock GONE otherwise it'll mess up the animation.
+     */
+    private int clockHiddenMode() {
+        if (!mStatusBar.isClosed() && !mKeyguardMonitor.isShowing()) {
+            return View.INVISIBLE;
+        }
+        return View.GONE;
     }
 
     public void hideNotificationIconArea(boolean animate) {
