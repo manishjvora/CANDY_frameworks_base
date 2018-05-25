@@ -327,11 +327,15 @@ public class BoostFramework {
 /** @hide */
     public int perfUXEngine_events(int opcode, int pid, String pkgName, int lat) {
         int ret = -1;
-        if (sIopv2 == -1) {
+        boolean bindApp_check = (opcode == UXE_EVENT_BINDAPP) ? true : false;
+        if (sIopv2 == -1 && !bindApp_check) {
             sIopv2 = SystemProperties.getInt("vendor.iop.enable_uxe", 0);
         }
         try {
-            if (sIopv2 == 0 || sUXEngineEvents == null) {
+            if (sUXEngineEvents == null) {
+                return ret;
+            }
+            if (!bindApp_check && sIopv2 == 0) {
                 return ret;
             }
             Object retVal = sUXEngineEvents.invoke(mPerf, opcode, pid, pkgName, lat);
