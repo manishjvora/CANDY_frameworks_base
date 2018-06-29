@@ -22,6 +22,8 @@ import static android.app.AppOpsManager.OP_SYSTEM_ALERT_WINDOW;
 import static android.app.AppOpsManager.OP_TOAST_WINDOW;
 import static android.app.WindowConfiguration.ACTIVITY_TYPE_HOME;
 import static android.app.WindowConfiguration.ACTIVITY_TYPE_STANDARD;
+import static android.app.WindowConfiguration.ACTIVITY_TYPE_UNDEFINED;
+import static android.app.WindowConfiguration.ACTIVITY_TYPE_RECENTS;
 import static android.app.WindowConfiguration.WINDOWING_MODE_FREEFORM;
 import static android.app.WindowConfiguration.WINDOWING_MODE_FULLSCREEN;
 import static android.app.WindowConfiguration.WINDOWING_MODE_SPLIT_SCREEN_PRIMARY;
@@ -2215,6 +2217,62 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         return mContext.getResources().getConfiguration().isScreenRound();
     }
 
+    private static void triggerVirtualKeypress(Context context, final int keyCode) {
+        final InputManager im = InputManager.getInstance();
+        final long now = SystemClock.uptimeMillis();
+        int downflags = 0;
+
+        if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT
+                || keyCode == KeyEvent.KEYCODE_DPAD_RIGHT
+                || keyCode == KeyEvent.KEYCODE_DPAD_UP
+                || keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+            downflags = KeyEvent.FLAG_SOFT_KEYBOARD | KeyEvent.FLAG_KEEP_TOUCH_MODE;
+        } else {
+            downflags = KeyEvent.FLAG_FROM_SYSTEM;
+        }
+
+        final KeyEvent downEvent = new KeyEvent(now, now, KeyEvent.ACTION_DOWN,
+                keyCode, 0, 0, KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
+                downflags, InputDevice.SOURCE_KEYBOARD);
+        final KeyEvent upEvent = KeyEvent.changeAction(downEvent, KeyEvent.ACTION_UP);
+        final Handler handler = new Handler(Looper.getMainLooper());
+
+        final Runnable downRunnable = new Runnable() {
+            @Override
+            public void run() {
+                im.injectInputEvent(downEvent, InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
+            }
+        };
+
+        final Runnable upRunnable = new Runnable() {
+            @Override
+            public void run() {
+                im.injectInputEvent(upEvent, InputManager.INJECT_INPUT_EVENT_MODE_ASYNC);
+            }
+        };
+
+        handler.post(downRunnable);
+        handler.postDelayed(upRunnable, 10);
+    }
+
+    private boolean isTopAppGame() {
+        boolean isGame = false;
+        try {
+            ActivityManager.RunningTaskInfo rti = ActivityManager.getService().getFilteredTasks(1,
+                                    ACTIVITY_TYPE_RECENTS, WINDOWING_MODE_UNDEFINED).get(0);
+            ApplicationInfo ai = mContext.getPackageManager().getApplicationInfo(
+                        rti.topActivity.getPackageName(), 0);
+            if(ai != null) {
+                isGame = (ai.category == ApplicationInfo.CATEGORY_GAME) ||
+                        ((ai.flags & ApplicationInfo.FLAG_IS_GAME) ==
+                            ApplicationInfo.FLAG_IS_GAME);
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return isGame;
+    }
+
     /** {@inheritDoc} */
     @Override
     public void init(Context context, IWindowManager windowManager,
@@ -2447,12 +2505,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     }
                     @Override
                     public void onFling(int duration) {
-                        String currentPackage = mContext.getPackageName();
                         if (mPowerManagerInternal != null) {
                             mPowerManagerInternal.powerHint(
                                     PowerHint.INTERACTION, duration);
                         }
-                        if (SCROLL_BOOST_SS_ENABLE) {
+                    }
+                    @Override
+                    public void onVerticalFling(int duration) {
+                        String currentPackage = mContext.getPackageName();
+                        boolean isGame = isTopAppGame();
+                        if (SCROLL_BOOST_SS_ENABLE && !isGame) {
                             if (mPerfBoostFling == null) {
                                 mPerfBoostFling = new BoostFramework();
                                 mIsPerfBoostFlingAcquired = false;
@@ -2470,6 +2532,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     @Override
                     public void onScroll(boolean started) {
                         String currentPackage = mContext.getPackageName();
+                        boolean isGame = isTopAppGame();
                         if (mPerfBoostDrag == null) {
                             mPerfBoostDrag = new BoostFramework();
                         }
@@ -2477,7 +2540,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             Slog.e(TAG, "Error: boost object null");
                             return;
                         }
-                        if (SCROLL_BOOST_SS_ENABLE) {
+                        if (SCROLL_BOOST_SS_ENABLE && !isGame) {
                             if (mPerfBoostPrefling == null) {
                                 mPerfBoostPrefling = new BoostFramework();
                             }
@@ -2488,7 +2551,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             mPerfBoostPrefling.perfHint(BoostFramework.VENDOR_HINT_SCROLL_BOOST,
                                     currentPackage, -1, BoostFramework.Scroll.PREFILING);
                         }
-                        if (started) {
+                        if (!isGame && started) {
                             mPerfBoostDrag.perfHint(BoostFramework.VENDOR_HINT_DRAG_BOOST,
                                             currentPackage, -1, 1);
                         } else {
