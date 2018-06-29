@@ -57,7 +57,7 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
     private ImageView mMobile, mMobileType, mMobileRoaming;
     private View mMobileRoamingSpace;
     private int mVisibleState = -1;
-    private boolean mActivityEnabled;
+    private ImageView mVolte;
 
     public static StatusBarMobileView fromContext(Context context, String slot) {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -105,6 +105,7 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
         mMobileRoaming = findViewById(R.id.mobile_roaming);
         mMobileRoamingSpace = findViewById(R.id.mobile_roaming_space);
         mInoutContainer = findViewById(R.id.inout_container);
+        mVolte = findViewById(R.id.mobile_volte);
 
         mMobileDrawable = new SignalDrawable(getContext());
         mMobile.setImageDrawable(mMobileDrawable);
@@ -162,7 +163,16 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
 
         mMobileRoaming.setVisibility(mState.roaming ? View.VISIBLE : View.GONE);
         mMobileRoamingSpace.setVisibility(mState.roaming ? View.VISIBLE : View.GONE);
-        mInoutContainer.setState(mState.activityIn, mState.activityOut);
+        mIn.setVisibility(mState.activityIn ? View.VISIBLE : View.GONE);
+        mOut.setVisibility(mState.activityIn ? View.VISIBLE : View.GONE);
+        mInoutContainer.setVisibility((mState.activityIn || mState.activityOut)
+                ? View.VISIBLE : View.GONE);
+        if (mState.volteId > 0 ) {
+            mVolte.setImageResource(mState.volteId);
+            mVolte.setVisibility(View.VISIBLE);
+        }else {
+            mVolte.setVisibility(View.GONE);
+        }
     }
 
     private void updateState(MobileIconState state) {
@@ -189,6 +199,14 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
         mMobileRoamingSpace.setVisibility(state.roaming ? View.VISIBLE : View.GONE);
         mInoutContainer.setState(state.activityIn, state.activityOut);
 
+        if (mState.volteId != state.volteId) {
+            if (state.volteId != 0) {
+                mVolte.setImageResource(state.volteId);
+                mVolte.setVisibility(View.VISIBLE);
+            } else {
+                mVolte.setVisibility(View.GONE);
+            }
+        }
         mState = state;
     }
 
