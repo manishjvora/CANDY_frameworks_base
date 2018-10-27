@@ -180,4 +180,10 @@
 
     <!-- Tuner StatusBar blacklist -->
     <string name="tuner_cellular_title">Mobile</string>
+
+     <!-- Music tile -->
+    <string name="quick_settings_music_label">Music</string>
+    <string name="quick_settings_music_play">Play</string>
+    <string name="quick_settings_music_pause">Pause</string>
+
 </resources>
