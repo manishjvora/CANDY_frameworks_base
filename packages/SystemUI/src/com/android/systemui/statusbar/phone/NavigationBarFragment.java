@@ -782,6 +782,28 @@ Navigator.OnVerticalChangedListener, KeyguardMonitor.Callback, NotificationMedia
         return (disable2Flags & StatusBarManager.DISABLE2_ROTATE_SUGGESTIONS) != 0;
     }
 
+    @Override
+    public void leftInLandscapeChanged(boolean isLeft) {
+        mLeftInLandscape = isLeft;
+        if (mNavigationBarView != null) {
+            mNavigationBarView.setLeftInLandscape(isLeft);
+        }
+    }
+
+    public void setPulseColors(boolean colorizedMedia, int[] colors) {
+        if (mNavigationBarView != null) {
+            mNavigationBarView.setPulseColors(colorizedMedia, colors);
+        }
+    }
+
+
+    @Override
+    public void onMediaUpdated(boolean playing) {
+        if (mNavigationBarView != null) {
+            mNavigationBarView.setMediaPlaying(playing);
+        }
+    }
+
     // ----- Internal stuffz -----
 
     private void refreshLayout(int layoutDirection) {
@@ -822,6 +844,20 @@ Navigator.OnVerticalChangedListener, KeyguardMonitor.Callback, NotificationMedia
 
     private void notifyNavigationBarScreenOn() {
         mNavigationBarView.updateNavButtonIcons();
+    }
+
+    private void notifyPulseScreenOn(boolean on) {
+        mNavigationBarView.notifyPulseScreenOn(on);
+    }
+
+    private void sendIntentToPulse(Intent intent) {
+        mNavigationBarView.sendIntentToPulse(intent);
+    }
+
+    @Override
+    public void onDetach() {
+        mNavigationBarView.dispose();
+        super.onDetach();
     }
 
     private void prepareNavigationBarView() {
