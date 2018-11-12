@@ -144,6 +144,11 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
         mQsTileRevealController = new QSTileRevealController(mContext, this,
                 (PagedTileLayout) mTileLayout);
 
+        mBrightnessView.setPadding(mBrightnessView.getPaddingLeft(),
+        mBrightnessView.getPaddingTop(), mBrightnessView.getPaddingRight(),
+        mContext.getResources().getDimensionPixelSize(R.dimen.qs_brightness_footer_padding));
+        addView(mBrightnessView);
+
         addDivider();
 
         mFooter = new QSSecurityFooter(this, context);
@@ -151,24 +156,22 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
 
         updateResources();
 
-        mAdaptiveBrightness = (ImageView) mBrightnessView.findViewById(R.id.brightness_icon);
-        mAdaptiveBrightnessLeft =
-            (ImageView) mBrightnessView.findViewById(R.id.brightness_icon_left);
+        ImageView brightnessIcon = (ImageView) mBrightnessView.findViewById(R.id.brightness_icon);
+        brightnessIcon.setVisibility(View.VISIBLE);
         mBrightnessController = new BrightnessController(context,
-                mAdaptiveBrightness, mAdaptiveBrightnessLeft,
+                brightnessIcon,
                 findViewById(R.id.brightness_slider));
 
-        mMinBrightness = mBrightnessView.findViewById(R.id.brightness_left);
+        ImageView mMinBrightness = mBrightnessView.findViewById(R.id.brightness_left);
         mMinBrightness.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int currentValue = Settings.System.getIntForUser(resolver,
-                        Settings.System.SCREEN_BRIGHTNESS, 0, UserHandle.USER_CURRENT);
-                int brightness = currentValue - 2;
+                int currentValue = Settings.System.getInt(resolver,
+                        Settings.System.SCREEN_BRIGHTNESS, 0);
+                int brightness = currentValue - 10;
                 if (currentValue != 0) {
-                    int math = Math.max(0, brightness);
-                    Settings.System.putIntForUser(resolver,
-                            Settings.System.SCREEN_BRIGHTNESS, math, UserHandle.USER_CURRENT);
+                    Settings.System.putInt(resolver,
+                            Settings.System.SCREEN_BRIGHTNESS, Math.max(0, brightness));
                 }
             }
         });
@@ -185,13 +188,12 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
         mMaxBrightness.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int currentValue = Settings.System.getIntForUser(resolver,
-                        Settings.System.SCREEN_BRIGHTNESS, 0, UserHandle.USER_CURRENT);
-                int brightness = currentValue + 2;
+                int currentValue = Settings.System.getInt(resolver,
+                        Settings.System.SCREEN_BRIGHTNESS, 0);
+                int brightness = currentValue + 10;
                 if (currentValue != 255) {
-                    int math = Math.min(255, brightness);
-                    Settings.System.putIntForUser(resolver,
-                            Settings.System.SCREEN_BRIGHTNESS, math, UserHandle.USER_CURRENT);
+                    Settings.System.putInt(resolver,
+                            Settings.System.SCREEN_BRIGHTNESS, Math.min(255, brightness));
                 }
             }
         });
