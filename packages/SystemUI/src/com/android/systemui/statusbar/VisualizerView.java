@@ -113,14 +113,24 @@ public class VisualizerView extends View
         });
     }
 
-    private void unlink() {
-        mUiOffloadThread.submit(() -> {
-            if (mVisualizer != null) {
-                mVisualizer.setEnabled(false);
-                mVisualizer.release();
-                mVisualizer = null;
+            if (DEBUG) {
+                Log.w(TAG, "--- mLinkVisualizer run()");
             }
-        });
+        }
+    };
+
+    private void unlink() {
+        if (DEBUG) {
+            Log.w(TAG, "+++ mUnlinkVisualizer run(), mVisualizer: " + mVisualizer);
+        }
+        if (mVisualizer != null) {
+            mVisualizer.setEnabled(false);
+            mVisualizer.release();
+            mVisualizer = null;
+        }
+        if (DEBUG) {
+            Log.w(TAG, "--- mUninkVisualizer run()");
+        }
     }
 
     public VisualizerView(Context context, AttributeSet attrs, int defStyle) {
@@ -350,16 +360,15 @@ public class VisualizerView extends View
             }
         } else {
             if (mDisplaying) {
+                unlink();
                 mDisplaying = false;
                 if (mVisible) {
                     animate()
                             .alpha(0f)
-                            .withEndAction(mAsyncUnlinkVisualizer)
                             .setDuration(600);
                 } else {
                     animate().
                             alpha(0f)
-                            .withEndAction(mAsyncUnlinkVisualizer)
                             .setDuration(0);
                 }
             }
