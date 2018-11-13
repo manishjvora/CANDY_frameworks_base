@@ -216,7 +216,7 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
             return;
         }
         mMobileDrawable.setDarkIntensity(getDarkIntensity(area, this, darkIntensity));
-        mInoutContainer.setDarkIntensity(darkIntensity);
+        mInoutContainer.setDarkIntensity(getDarkIntensity(area, this, darkIntensity));
         int areaTint = getTint(area, this, tint);
         ColorStateList color = ColorStateList.valueOf(areaTint);
         mMobileType.setImageTintList(color);
