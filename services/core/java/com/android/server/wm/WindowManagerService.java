@@ -6126,11 +6126,6 @@ public class WindowManagerService extends IWindowManager.Stub
     }
 
     @Override
-    public void sendCustomAction(Intent intent) {
-        mPolicy.sendCustomAction(intent);
-    }
-
-    @Override
     public void lockNow(Bundle options) {
         mPolicy.lockNow(options);
     }
@@ -7685,5 +7680,9 @@ public class WindowManagerService extends IWindowManager.Stub
         synchronized (mWindowMap) {
             scheduleAnimationLocked();
         }
+    }
+
+    public void sendCustomAction(Intent intent) {
+        mPolicy.sendCustomAction(intent);
     }
 }

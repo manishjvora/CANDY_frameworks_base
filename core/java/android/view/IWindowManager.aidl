@@ -280,11 +280,6 @@ interface IWindowManager
     oneway void statusBarVisibilityChanged(int visibility);
 
     /**
-     * Send some ActionHandler commands to WindowManager.
-     */
-    void sendCustomAction(in Intent intent);
-
-    /**
      * Called by System UI to notify of changes to the visibility of Recents.
      */
     oneway void setRecentsVisibility(boolean visible);
@@ -469,4 +464,9 @@ interface IWindowManager
      * This requires the ONE_HANDED_MODE permission.
      */
     void unregisterOneHandedModeListener(IOneHandedModeListener listener);
+
+    /**
+     * Send some ActionHandler commands to WindowManager.
+     */
+    void sendCustomAction(in Intent intent);
 }

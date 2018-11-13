@@ -1588,11 +1588,6 @@ public interface WindowManagerPolicy extends WindowManagerPolicyConstants {
     public boolean hasNavigationBar();
 
     /**
-     * Send some ActionHandler commands to WindowManager.
-     */
-    public void sendCustomAction(Intent intent);
-
-    /**
      * Lock the device now.
      */
     public void lockNow(Bundle options);
@@ -1813,4 +1808,10 @@ public interface WindowManagerPolicy extends WindowManagerPolicyConstants {
      * Call screen record from WindowManager.
      */
     public void screenRecordAction(int mode);
+
+    /*
+     *
+     * Send some ActionHandler commands to WindowManager.
+     */
+    public void sendCustomAction(Intent intent);
 }
