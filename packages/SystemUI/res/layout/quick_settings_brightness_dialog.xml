@@ -18,9 +18,20 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:layout_gravity="center_vertical"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
     style="@style/BrightnessDialogContainer">
+
+    <ImageButton
+        android:id="@+id/brightness_icon_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_qs_brightness_auto_off"
+        android:contentDescription="@null"
+        android:layout_marginStart="20dp"
+        android:visibility="gone" />
 
     <ImageButton
         android:id="@+id/brightness_left"
