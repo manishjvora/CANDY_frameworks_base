@@ -235,8 +235,7 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
         }
         if (mAllowFancy) {
             // Make brightness appear static position and alpha in through second half.
-            View brightness = mQsPanel.getBrightnessView();
-            if (brightness != null) {
+            if (brightness != null && !mQsPanel.isBrightnessViewBottom()) {
                 firstPageBuilder.addFloat(brightness, "translationY", heightDiff, 0);
                 mBrightnessAnimator = new TouchAnimator.Builder()
                         .addFloat(brightness, "alpha", 0, 1)
@@ -255,10 +254,15 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
                     .addFloat(mQsPanel.getPageIndicator(), "alpha", 0, 1)
                     .addFloat(tileLayout, "alpha", 0, 1)
                     .addFloat(mQsPanel.getDivider(), "alpha", 0, 1)
-                    .addFloat(mQsPanel.getFooter().getView(), "alpha", 0, 1).build();
+                    .addFloat(mQsPanel.getFooter().getView(), "alpha", 0, 1);
             mAllViews.add(mQsPanel.getPageIndicator());
             mAllViews.add(mQsPanel.getDivider());
             mAllViews.add(mQsPanel.getFooter().getView());
+            if (brightness != null && mQsPanel.isBrightnessViewBottom()) {
+                builder.addFloat(mQsPanel.getBrightnessView(), "alpha", 0, 1);
+                mAllViews.add(mQsPanel.getBrightnessView());
+            }
+            mFirstPageDelayedAnimator = builder.build();
             float px = 0;
             float py = 1;
             if (tiles.size() <= 3) {
@@ -277,8 +281,11 @@ public class QSAnimator implements Callback, PageListener, Listener, OnLayoutCha
                 .addFloat(mQsPanel.getPageIndicator(), "alpha", 0, 1)
                 .addFloat(mQsPanel.getDivider(), "alpha", 0, 1)
                 .setListener(mNonFirstPageListener)
-                .setEndDelay(.5f)
-                .build();
+                .setEndDelay(.5f);
+        if (brightness != null && mQsPanel.isBrightnessViewBottom()) {
+            builder.addFloat(mQsPanel.getBrightnessView(), "alpha", 0, 1);
+        }
+        mNonfirstPageAnimator = builder.build();
         mNonfirstPageDelayedAnimator = new TouchAnimator.Builder()
                 .setStartDelay(.14f)
                 .addFloat(tileLayout, "alpha", 0, 1).build();
