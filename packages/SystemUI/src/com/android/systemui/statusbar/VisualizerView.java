@@ -36,7 +36,7 @@ import com.android.systemui.Dependency;
 import com.android.systemui.UiOffloadThread;
 
 public class VisualizerView extends View
-        implements Palette.PaletteAsyncListener, TunerService.Tunable {
+        implements Palette.PaletteAsyncListener {
 
     private static final String TAG = VisualizerView.class.getSimpleName();
     private static final boolean DEBUG = false;
