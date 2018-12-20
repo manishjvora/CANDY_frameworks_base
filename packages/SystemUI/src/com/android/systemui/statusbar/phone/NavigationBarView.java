@@ -70,8 +70,8 @@ import com.android.systemui.RecentsComponent;
 import com.android.systemui.SysUiServiceProvider;
 import com.android.systemui.navigation.Navigator;
 import com.android.systemui.onehand.SlideTouchEvent;
-import com.android.systemui.pulse.PulseController;
-import com.android.systemui.pulse.PulseController.PulseObserver;
+import com.android.systemui.navigation.pulse.PulseController;
+import com.android.systemui.navigation.pulse.PulseController.PulseObserver;
 import com.android.systemui.plugins.PluginListener;
 import com.android.systemui.plugins.PluginManager;
 import com.android.systemui.plugins.statusbar.phone.NavGesture;
@@ -1083,12 +1083,6 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
     public void sendIntentToPulse(Intent intent) {
         if (mPulse != null) {
             mPulse.onReceive(intent);
-        }
-    }
-
-    public final void dispose() {
-        if (mPulse != null) {
-            mPulse.doUnlinkVisualizer();
         }
     }
 
