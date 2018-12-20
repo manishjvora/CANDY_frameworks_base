@@ -16,12 +16,14 @@
 
 package com.android.systemui.statusbar.phone;
 
+import android.app.ActivityThread;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Looper;
 import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
 import android.util.ArraySet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,6 +40,7 @@ import com.android.systemui.statusbar.policy.NetworkController;
 import com.android.systemui.statusbar.policy.NetworkController.IconState;
 import com.android.systemui.statusbar.policy.NetworkControllerImpl;
 import com.android.systemui.statusbar.policy.SecurityController;
+import com.android.systemui.tuner.TunerService;
 import com.android.systemui.tuner.TunerService.Tunable;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +50,7 @@ import com.android.internal.telephony.util.TelephonyExtUtils;
 import com.android.internal.telephony.util.TelephonyExtUtils.ProvisioningChangedListener;
 
 public class StatusBarSignalPolicy implements NetworkControllerImpl.SignalCallback,
-        SecurityController.SecurityControllerCallback, Tunable {
+        SecurityController.SecurityControllerCallback, Tunable, ProvisioningChangedListener {
     private static final String TAG = "StatusBarSignalPolicy";
 
     private static final String SLOT_ROAMING = "roaming";
@@ -94,10 +97,30 @@ public class StatusBarSignalPolicy implements NetworkControllerImpl.SignalCallba
         mNetworkController = Dependency.get(NetworkController.class);
         mSecurityController = Dependency.get(SecurityController.class);
 
+        Dependency.get(TunerService.class).addTunable(this, StatusBarIconController.ICON_BLACKLIST);
         mNetworkController.addCallback(this);
         mSecurityController.addCallback(this);
 
+        TelephonyExtUtils.getInstance(context).addListener(this);
+
         Dependency.get(TunerService.class).addTunable(this, StatusBarIconController.ICON_BLACKLIST);
+    }
+
+    @Override
+    public void onProvisioningChanged(int slotId, boolean isProvisioned) {
+        int[] subId = SubscriptionManager.getSubId(slotId);
+        if (subId != null) {
+            MobileIconState state = getState(subId[0]);
+            if (state != null) {
+                state.mProvisioned = isProvisioned;
+                if (!isProvisioned) {
+                    state.visible = false;
+                }
+            }
+
+            mNetworkController.removeCallback(this);
+            mNetworkController.addCallback(this);
+        }
     }
 
     public void destroy() {
