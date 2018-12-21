@@ -21,6 +21,7 @@ import static com.android.systemui.statusbar.StatusBarIconView.STATE_HIDDEN;
 import static com.android.systemui.statusbar.StatusBarIconView.STATE_ICON;
 import static com.android.systemui.statusbar.policy.DarkIconDispatcher.getTint;
 import static com.android.systemui.statusbar.policy.DarkIconDispatcher.isInArea;
+import static com.android.systemui.statusbar.policy.DarkIconDispatcher.getDarkIntensity;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -69,6 +70,27 @@ public class StatusBarWifiView extends FrameLayout implements DarkReceiver,
 
     private ContextThemeWrapper mDarkContext;
     private ContextThemeWrapper mLightContext;
+
+    private boolean mShowWifiActivity;
+    private final Handler mHandler = new Handler();
+
+
+    private class SettingsObserver extends ContentObserver {
+         SettingsObserver(Handler handler) {
+             super(handler);
+         }
+
+         void observe() {
+             getContext().getContentResolver().registerContentObserver(Settings.System.getUriFor(
+                 Settings.System.STATUSBAR_SHOW_WIFI_ACTIVITY), false, this, UserHandle.USER_ALL);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            updateSettings();
+        }
+    }
+    private SettingsObserver mSettingsObserver = new SettingsObserver(mHandler);
 
     public static StatusBarWifiView fromContext(Context context, String slot) {
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -263,5 +285,10 @@ public class StatusBarWifiView extends FrameLayout implements DarkReceiver,
     @Override
     public String toString() {
         return "StatusBarWifiView(slot=" + mSlot + " state=" + mState + ")";
+    }
+
+    public void updateSettings() {
+        mShowWifiActivity = Settings.System.getIntForUser(getContext().getContentResolver(),
+            Settings.System.STATUSBAR_SHOW_WIFI_ACTIVITY, 1, UserHandle.USER_CURRENT) == 1;
     }
 }
