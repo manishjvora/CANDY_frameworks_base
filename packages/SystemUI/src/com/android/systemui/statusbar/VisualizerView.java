@@ -32,6 +32,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+import com.android.systemui.Dependency;
+import com.android.systemui.UiOffloadThread;
 
 public class VisualizerView extends View
         implements Palette.PaletteAsyncListener {
@@ -113,24 +115,14 @@ public class VisualizerView extends View
         });
     }
 
-            if (DEBUG) {
-                Log.w(TAG, "--- mLinkVisualizer run()");
-            }
-        }
-    };
-
     private void unlink() {
-        if (DEBUG) {
-            Log.w(TAG, "+++ mUnlinkVisualizer run(), mVisualizer: " + mVisualizer);
-        }
-        if (mVisualizer != null) {
-            mVisualizer.setEnabled(false);
-            mVisualizer.release();
-            mVisualizer = null;
-        }
-        if (DEBUG) {
-            Log.w(TAG, "--- mUninkVisualizer run()");
-        }
+        mUiOffloadThread.submit(() -> {
+            if (mVisualizer != null) {
+                mVisualizer.setEnabled(false);
+                mVisualizer.release();
+                mVisualizer = null;
+            }
+        });
     }
 
     public VisualizerView(Context context, AttributeSet attrs, int defStyle) {
