@@ -3245,7 +3245,7 @@ public final class Settings {
          * @hide
          */
         public static final String STATUS_BAR_IME_SWITCHER = "status_bar_ime_switcher";
-       
+
         /**
          * The button brightness to be used while the screen is on or after a button press,
          * depending on the value of {@link BUTTON_BACKLIGHT_TIMEOUT}.
@@ -3265,7 +3265,7 @@ public final class Settings {
          * @hide
          */
         public static final String BUTTON_BACKLIGHT_ON_TOUCH_ONLY = "button_backlight_on_touch_only";
-       
+
         /**
          * Control whether the process CPU usage meter should be shown.
          *
@@ -4550,6 +4550,15 @@ public final class Settings {
         public static final String LOCK_SCREEN_VISUALIZER_CUSTOM_COLOR = "lock_screen_visualizer_custom_color";
 
         /**
+         * Enable or disable wifi data activity indicators
+         * @hide
+         */
+        public static final String STATUSBAR_SHOW_WIFI_ACTIVITY = "statusbar_show_wifi_activity";
+
+        /** @hide */
+        private static final Validator STATUSBAR_SHOW_WIFI_ACTIVITY_VALIDATOR = BOOLEAN_VALIDATOR;
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
@@ -4617,6 +4626,7 @@ public final class Settings {
             STATUSBAR_CLOCK_DATE_FORMAT,
             USE_BOTTOM_GESTURE_NAVIGATION,
             ONE_HAND_MODE_ENABLED,
+            STATUSBAR_SHOW_WIFI_ACTIVITY,
         };
 
         /**
@@ -4750,6 +4760,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(STATUS_BAR_QUICK_QS_PULLDOWN);
             PRIVATE_SETTINGS.add(ONE_HAND_MODE_ENABLED);
             PRIVATE_SETTINGS.add(MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD);
+            PRIVATE_SETTINGS.add(STATUSBAR_SHOW_WIFI_ACTIVITY);
         }
 
         /**
@@ -4849,7 +4860,7 @@ public final class Settings {
                     USE_BOTTOM_GESTURE_NAVIGATION_VALIDATOR);
             VALIDATORS.put(ONE_HAND_MODE_ENABLED, ONE_HAND_MODE_ENABLED_VALIDATOR);
             VALIDATORS.put(MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD, MUTE_ANNOYING_NOTIFICATIONS_THRESHOLD_VALIDATOR);
-
+            VALIDATORS.put(STATUSBAR_SHOW_WIFI_ACTIVITY, STATUSBAR_SHOW_WIFI_ACTIVITY_VALIDATOR);
         }
 
         /**

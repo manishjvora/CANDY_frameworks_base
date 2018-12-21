@@ -23,6 +23,7 @@ import static com.android.systemui.statusbar.policy.DarkIconDispatcher.getTint;
 import static com.android.systemui.statusbar.policy.DarkIconDispatcher.isInArea;
 import static com.android.systemui.statusbar.policy.DarkIconDispatcher.getDarkIntensity;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.database.ContentObserver;
