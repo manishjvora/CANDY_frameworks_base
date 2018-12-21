@@ -236,8 +236,8 @@ public class StatusBarSignalPolicy implements NetworkControllerImpl.SignalCallba
         state.contentDescription = statusIcon.contentDescription;
         state.typeContentDescription = typeContentDescription;
         state.roaming = roaming && !mBlockRoaming;
-        state.activityIn = activityIn && mActivityEnabled;
-        state.activityOut = activityOut && mActivityEnabled;
+        state.activityIn = activityIn;
+        state.activityOut = activityOut;
         state.volteId = volteId;
 
       // Always send a copy to maintain value type semantics
@@ -434,10 +434,16 @@ public class StatusBarSignalPolicy implements NetworkControllerImpl.SignalCallba
         public String typeContentDescription;
         private boolean mProvisioned = true;
         public int volteId;
+        public Context mContext;
 
-        private MobileIconState(int subId) {
+        private MobileIconState(int subId, Context context) {
             super();
             this.subId = subId;
+            this.mContext = context;
+            TelephonyExtUtils extTelephony = TelephonyExtUtils.getInstance(context);
+            if (extTelephony.hasService()) {
+                mProvisioned = extTelephony.isSubProvisioned(subId);
+            }
         }
 
         @Override
