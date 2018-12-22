@@ -17,6 +17,8 @@
 package com.android.systemui.qs;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+import static android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL;
+import static com.android.settingslib.display.BrightnessUtils.GAMMA_SPACE_MAX;
 import static com.android.systemui.qs.tileimpl.QSTileImpl.getColorForState;
 
 import android.annotation.Nullable;
@@ -27,8 +29,13 @@ import android.content.res.Resources;
 import android.metrics.LogMaker;
 import android.os.Handler;
 import android.os.Message;
+import android.os.UserHandle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.provider.Settings;
 import android.service.quicksettings.Tile;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -111,6 +118,9 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
         super(context, attrs);
         mContext = context;
 
+       final ContentResolver resolver = context.getContentResolver();
+
+        mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
         setOrientation(VERTICAL);
 
         mBrightnessView = LayoutInflater.from(mContext).inflate(
@@ -844,10 +854,6 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
     }
 
     public void updateSettings() {
-        if (mFooter != null) {
-            mFooter.updateSettings();
-        }
-
         if (mTileLayout != null) {
             for (TileRecord r : mRecords) {
                 configureTile(r.tile, r.tileView);

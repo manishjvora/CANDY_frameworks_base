@@ -62,9 +62,9 @@ public class BrightnessMirrorController
     private boolean mAutoBrightnessEnabled;
     private boolean mAutoBrightnessRight;
 
-
-    public BrightnessMirrorController(StatusBarWindowView statusBarWindow,
+    public BrightnessMirrorController(Context context, StatusBarWindowView statusBarWindow,
             @NonNull Consumer<Boolean> visibilityCallback) {
+        mContext = context;
         mStatusBarWindow = statusBarWindow;
         mBrightnessMirror = statusBarWindow.findViewById(R.id.brightness_mirror);
         mNotificationPanel = statusBarWindow.findViewById(R.id.notification_panel);
