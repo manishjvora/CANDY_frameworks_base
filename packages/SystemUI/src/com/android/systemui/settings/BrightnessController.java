@@ -318,6 +318,7 @@ public class BrightnessController implements ToggleSlider.Listener {
                     }
                 });
             }
+        }
 
         if (mAutomaticAvailable) {
             mIcon.setOnClickListener(new View.OnClickListener() {

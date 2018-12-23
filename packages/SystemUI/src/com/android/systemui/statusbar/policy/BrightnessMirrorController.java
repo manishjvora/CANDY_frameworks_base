@@ -62,9 +62,6 @@ public class BrightnessMirrorController
     private boolean mAutoBrightnessEnabled;
     private boolean mAutoBrightnessRight;
 
-    private final ImageView mIcon;
-    private Context mContext;
-
     public BrightnessMirrorController(Context context, StatusBarWindowView statusBarWindow,
             @NonNull Consumer<Boolean> visibilityCallback) {
         mContext = context;
@@ -217,7 +214,5 @@ public class BrightnessMirrorController
     private void updateViewVisibilityForTuningValue(View view, @Nullable String newValue) {
         view.setVisibility(newValue == null || Integer.parseInt(newValue) != 0
                 ? View.VISIBLE : View.GONE);
-=======
->>>>>>> b3915476b53... Add auto brightness toggle to Quick Settings
     }
 }
