@@ -2530,25 +2530,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         }
                     }
                     @Override
-                    public void onVerticalFling(int duration) {
-                        String currentPackage = mContext.getPackageName();
-                        boolean isGame = isTopAppGame();
-                        if (SCROLL_BOOST_SS_ENABLE && !isGame) {
-                            if (mPerfBoostFling == null) {
-                                mPerfBoostFling = new BoostFramework();
-                                mIsPerfBoostFlingAcquired = false;
-                            }
-                            if (mPerfBoostFling == null) {
-                                Slog.e(TAG, "Error: boost object null");
-                                return;
-                            }
-
-                            mPerfBoostFling.perfHint(BoostFramework.VENDOR_HINT_SCROLL_BOOST,
-                                currentPackage, duration + 160, BoostFramework.Scroll.VERTICAL);
-                            mIsPerfBoostFlingAcquired = true;
-                        }
-                    }
-                    @Override
                     public void onScroll(boolean started) {
                         String currentPackage = mContext.getPackageName();
                         boolean isGame = isTopAppGame();
