@@ -66,6 +66,8 @@ import java.util.Collection;
 /** View that represents the quick settings tile panel (when expanded/pulled down). **/
 public class QSPanel extends LinearLayout implements Tunable, Callback, BrightnessMirrorListener {
 
+    private static final String TAG = "QSPanel";
+
     public static final String QS_SHOW_BRIGHTNESS = "qs_show_brightness";
     public static final String QS_SHOW_HEADER = "qs_show_header";
     public static final String QS_BRIGHTNESS_POSITION_BOTTOM = "qs_brightness_position_bottom";
@@ -105,7 +107,7 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
     private ImageView mMaxBrightness;
     private ImageView mAdaptiveBrightness;
     private ImageView mAdaptiveBrightnessLeft;
-    private ImageView mBrightnessIcon;
+//    private ImageView mBrightnessIcon;
     private boolean mAutoBrightnessEnabled;
     private boolean mAutoBrightnessRight;
     private boolean mBrightnessBottom;
@@ -127,14 +129,12 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
 
         mBrightnessView = LayoutInflater.from(mContext).inflate(
             R.layout.quick_settings_brightness_dialog, this, false);
-        mBrightnessIcon = (ImageView) mBrightnessView.findViewById(R.id.brightness_icon);
-        mBrightnessIcon.setVisibility(View.VISIBLE);
-        addView(mBrightnessView);
 
         mTileLayout = (QSTileLayout) LayoutInflater.from(mContext).inflate(
                 R.layout.qs_paged_tile_layout, this, false);
         mTileLayout.setListening(mListening);
         addView((View) mTileLayout);
+        updateSettings();
 
         mPanelPageIndicator = (PageIndicator) LayoutInflater.from(context).inflate(
                 R.layout.qs_page_indicator, this, false);
@@ -162,7 +162,7 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
                 brightnessIcon,
                 findViewById(R.id.brightness_slider));
 
-        ImageView mMinBrightness = mBrightnessView.findViewById(R.id.brightness_left);
+        mMinBrightness = mBrightnessView.findViewById(R.id.brightness_left);
         mMinBrightness.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -270,8 +270,12 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
 
     @Override
     public void onTuningChanged(String key, String newValue) {
-        if (QS_SHOW_BRIGHTNESS.equals(key)) {
-            updateViewVisibilityForTuningValue(mBrightnessView, newValue);
+        try {
+            if (QS_SHOW_BRIGHTNESS.equals(key)) {
+                updateViewVisibilityForTuningValue(mBrightnessView, newValue);
+            }
+        } catch (Exception e){
+            Log.d(TAG, "Caught exception from Tuner", e);
         }
         if (QS_BRIGHTNESS_POSITION_BOTTOM.equals(key)) {
             if (newValue == null || Integer.parseInt(newValue) == 0) {
@@ -288,6 +292,8 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
             mAutoBrightnessRight = newValue == null || Integer.parseInt(newValue) != 0;
             updateAutoBrightnessVisibility();
         } else if (QS_SHOW_BRIGHTNESS_BUTTONS.equals(key)) {
+            mMinBrightness = (ImageView) mBrightnessMirrorController .findViewById(R.id.brightness_left);
+            mMaxBrightness = (ImageView) mBrightnessMirrorController .findViewById(R.id.brightness_right);
             updateViewVisibilityForTuningValue(mMinBrightness, newValue);
             updateViewVisibilityForTuningValue(mMaxBrightness, newValue);
         }
@@ -788,57 +794,6 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
         default void setExpansion(float expansion) {}
 
         boolean isShowTitles();
-    }
-
-    private void setAnimationTile(QSTileView v) {
-        ObjectAnimator animTile = null;
-        int animStyle = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.ANIM_TILE_STYLE, 0, UserHandle.USER_CURRENT);
-        int animDuration = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.ANIM_TILE_DURATION, 2000, UserHandle.USER_CURRENT);
-        int interpolatorType = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.ANIM_TILE_INTERPOLATOR, 0, UserHandle.USER_CURRENT);
-        if (animStyle == 0) {
-            //No animation
-        }
-        if (animStyle == 1) {
-            animTile = ObjectAnimator.ofFloat(v, "rotationY", 0f, 360f);
-        }
-        if (animStyle == 2) {
-            animTile = ObjectAnimator.ofFloat(v, "rotation", 0f, 360f);
-        }
-        if (animTile != null) {
-            switch (interpolatorType) {
-                    case 0:
-                        animTile.setInterpolator(new LinearInterpolator());
-                        break;
-                    case 1:
-                        animTile.setInterpolator(new AccelerateInterpolator());
-                        break;
-                    case 2:
-                        animTile.setInterpolator(new DecelerateInterpolator());
-                        break;
-                    case 3:
-                        animTile.setInterpolator(new AccelerateDecelerateInterpolator());
-                        break;
-                    case 4:
-                        animTile.setInterpolator(new BounceInterpolator());
-                        break;
-                    case 5:
-                        animTile.setInterpolator(new OvershootInterpolator());
-                        break;
-                    case 6:
-                        animTile.setInterpolator(new AnticipateInterpolator());
-                        break;
-                    case 7:
-                        animTile.setInterpolator(new AnticipateOvershootInterpolator());
-                        break;
-                    default:
-                        break;
-            }
-            animTile.setDuration(animDuration);
-            animTile.start();
-        }
     }
 
     private void configureTile(QSTile t, QSTileView v) {

@@ -55,6 +55,7 @@ public class BrightnessMirrorController
     private final int[] mInt2Cache = new int[2];
     private View mBrightnessMirror;
     private ImageView mIcon;
+    private ImageView mIconLeft;
     private ImageView mMinBrightness;
     private ImageView mMaxBrightness;
     private Context mContext;
@@ -72,6 +73,7 @@ public class BrightnessMirrorController
         });
         mVisibilityCallback = visibilityCallback;
         mIcon = (ImageView) mBrightnessMirror.findViewById(R.id.brightness_icon);
+        mIconLeft = (ImageView) mBrightnessMirror.findViewById(R.id.brightness_icon_left);
         mMinBrightness = (ImageView) mBrightnessMirror.findViewById(R.id.brightness_left);
         mMaxBrightness = (ImageView) mBrightnessMirror.findViewById(R.id.brightness_right);
     }
@@ -174,16 +176,24 @@ public class BrightnessMirrorController
                     com.android.systemui.R.drawable.ic_qs_brightness_auto_on_new :
                     com.android.systemui.R.drawable.ic_qs_brightness_auto_off_new);
         }
+        mIconLeft = (ImageView) mBrightnessMirror.findViewById(R.id.brightness_icon_left);
+        if (mIconLeft != null) {
+            mIconLeft.setImageResource(automatic ?
+                    com.android.systemui.R.drawable.ic_qs_brightness_auto_on :
+                    com.android.systemui.R.drawable.ic_qs_brightness_auto_off);
+        }
     }
 
     @Override
     public void onTuningChanged(String key, String newValue) {
         if (QSPanel.QS_SHOW_AUTO_BRIGHTNESS.equals(key)) {
             mIcon = (ImageView) mBrightnessMirror.findViewById(R.id.brightness_icon);
+            mIconLeft = (ImageView) mBrightnessMirror.findViewById(R.id.brightness_icon_left);
             mAutoBrightnessEnabled = newValue == null || Integer.parseInt(newValue) != 0;
             updateAutoBrightnessVisibility();
         } else if (QSPanel.QS_AUTO_BRIGHTNESS_RIGHT.equals(key)) {
             mIcon = (ImageView) mBrightnessMirror.findViewById(R.id.brightness_icon);
+            mIconLeft = (ImageView) mBrightnessMirror.findViewById(R.id.brightness_icon_left);
             mAutoBrightnessRight = newValue == null || Integer.parseInt(newValue) != 0;
             updateAutoBrightnessVisibility();
         } else if (QSPanel.QS_SHOW_BRIGHTNESS_BUTTONS.equals(key)) {
