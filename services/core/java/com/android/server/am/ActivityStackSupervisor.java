@@ -3459,12 +3459,6 @@ public class ActivityStackSupervisor extends ConfigurationContainer implements D
            mPerfBoost.perfIOPrefetchStart(-1,r.packageName,
                    r.appInfo.sourceDir.substring(0, r.appInfo.sourceDir.lastIndexOf('/')));
        }
-       if (mPerfPack == null) {
-           mPerfPack = new BoostFramework();
-       }
-       if (mPerfPack != null) {
-           mPerfPack.perfHint(BoostFramework.VENDOR_HINT_FIRST_LAUNCH_BOOST, packageName, -1, BoostFramework.Launch.BOOST_V2);
-       }
     }
 
     void acquireUxPerfLock(int opcode, String packageName) {
