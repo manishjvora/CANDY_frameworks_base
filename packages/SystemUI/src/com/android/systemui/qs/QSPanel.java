@@ -105,6 +105,7 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
     private ImageView mMaxBrightness;
     private ImageView mAdaptiveBrightness;
     private ImageView mAdaptiveBrightnessLeft;
+    private ImageView mBrightnessIcon;
     private boolean mAutoBrightnessEnabled;
     private boolean mAutoBrightnessRight;
     private boolean mBrightnessBottom;
@@ -126,8 +127,8 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
 
         mBrightnessView = LayoutInflater.from(mContext).inflate(
             R.layout.quick_settings_brightness_dialog, this, false);
-        ImageView brightnessIcon = (ImageView) findViewById(R.id.brightness_icon);
-        brightnessIcon.setVisibility(View.VISIBLE);
+        mBrightnessIcon = (ImageView) mBrightnessView.findViewById(R.id.brightness_icon);
+        mBrightnessIcon.setVisibility(View.VISIBLE);
         addView(mBrightnessView);
 
         mTileLayout = (QSTileLayout) LayoutInflater.from(mContext).inflate(
