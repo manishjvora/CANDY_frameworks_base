@@ -830,8 +830,13 @@ public class NavigationBarView extends FrameLayout implements PluginListener<Nav
                 showSwipeUpUI ? mQuickStepAccessibilityDelegate : null);
     }
 
-    public void updateSlippery() {
-        setSlippery(!isQuickStepSwipeUpEnabled() || mPanelView.isFullyExpanded());
+    private void updateSlippery() {
+        // temp hax for null mPanelView
+        if (mPanelView == null) {
+            mPanelView = SysUiServiceProvider.getComponent(getContext(), StatusBar.class).getPanel();
+        }
+        final boolean isExpanded = mPanelView != null ? mPanelView.isFullyExpanded() : false;
+        setSlippery(!isQuickStepSwipeUpEnabled() || isExpanded);
     }
 
     private void setSlippery(boolean slippery) {
