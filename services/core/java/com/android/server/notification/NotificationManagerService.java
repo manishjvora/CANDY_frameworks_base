@@ -1219,7 +1219,7 @@ public class NotificationManagerService extends SystemService {
             }
             if (uri == null || NOTIFICATION_RATE_LIMIT_URI.equals(uri)) {
                 mMaxPackageEnqueueRate = Settings.Global.getFloat(resolver,
-                            Settings.Global.MAX_NOTIFICATION_ENQUEUE_RATE, mMaxPackageEnqueueRate);
+                       Settings.Global.MAX_NOTIFICATION_ENQUEUE_RATE, mMaxPackageEnqueueRate);
             }
             if (uri == null || NOTIFICATION_BADGING_URI.equals(uri)) {
                 mRankingHelper.updateBadgingEnabled();
@@ -4800,9 +4800,7 @@ public class NotificationManagerService extends SystemService {
         }
 
         if (aboveThreshold && isNotificationForCurrentUser(record)) {
-
-            if (mSystemReady && mAudioManager != null && !mScreenOn
-                    || (mScreenOn && mSoundVibScreenOn)) {
+            if (mSystemReady && mAudioManager != null && !notificationIsAnnoying(pkg)) {
                 Uri soundUri = record.getSound();
                 hasValidSound = soundUri != null && !Uri.EMPTY.equals(soundUri);
                 long[] vibration = record.getVibration();
