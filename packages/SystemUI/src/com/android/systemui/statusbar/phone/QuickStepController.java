@@ -240,7 +240,7 @@ public class QuickStepController implements GestureHelper {
                     isDoubleTapPending = false;
                     wasConsumed = true;
                     mHandler.removeCallbacks(mDoubleTapCancelTimeout);
-                    Utils.switchScreenOff(mContext);
+                    CandyUtils.switchScreenOff(mContext);
                 } else {
                     // this is the first tap, let's go further and schedule a
                     // mDoubleTapCancelTimeout call in the action up event so after the set time
@@ -381,7 +381,7 @@ public class QuickStepController implements GestureHelper {
             wasConsumed = false;
             isDoubleTapPending = false;
             // it was a single tap, let's trigger the home button action
-            Utils.sendKeycode(KeyEvent.KEYCODE_HOME);
+            CandyUtils.sendKeycode(KeyEvent.KEYCODE_HOME);
         }
     };
 
