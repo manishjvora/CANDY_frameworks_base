@@ -653,7 +653,10 @@ public class StatusBarManagerService extends IStatusBarService.Stub {
         }
     }
 
+    @Override
     public void handleSystemNavigationKey(int key) throws RemoteException {
+        enforceExpandStatusBar();
+
         if (mBar != null) {
             try {
                 mBar.handleSystemNavigationKey(key);
@@ -674,6 +677,8 @@ public class StatusBarManagerService extends IStatusBarService.Stub {
 
     @Override
     public void handleSystemKey(int key) throws RemoteException {
+        enforceExpandStatusBar();
+
         if (mBar != null) {
             try {
                 mBar.handleSystemKey(key);
