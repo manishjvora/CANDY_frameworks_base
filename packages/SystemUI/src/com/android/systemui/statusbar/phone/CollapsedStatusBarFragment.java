@@ -195,7 +195,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         if ((diff1 & DISABLE_NOTIFICATION_ICONS) != 0) {
             if ((state1 & DISABLE_NOTIFICATION_ICONS) != 0) {
                 hideNotificationIconArea(animate);
-                animateHide(mClockView, animate, false);
+                animateHide(mClockView, animate);
             } else {
                 showNotificationIconArea(animate);
             }
@@ -241,10 +241,10 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     }
 
     public void hideSystemIconArea(boolean animate) {
-        animateHide(mSystemIconArea, animate, true);
-        animateHide(mCenterClockLayout, animate, true);
+        animateHide(mSystemIconArea, animate);
+        animateHide(mCenterClockLayout, animate);
         if (mClockStyle == 2) {
-            animateHide(mRightClock, animate, true);
+            animateHide(mRightClock, animate);
         }
     }
 
@@ -276,8 +276,8 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
     }
 
     public void hideNotificationIconArea(boolean animate) {
-        animateHide(mNotificationIconAreaInner, animate, true);
-        animateHide(mCenterClockLayout, animate, true);
+        animateHide(mNotificationIconAreaInner, animate);
+        animateHide(mCenterClockLayout, animate);
     }
 
     public void showNotificationIconArea(boolean animate) {
@@ -287,7 +287,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
 
     public void hideOperatorName(boolean animate) {
         if (mOperatorNameFrame != null) {
-            animateHide(mOperatorNameFrame, animate, true);
+            animateHide(mOperatorNameFrame, animate);
         }
     }
 
@@ -384,7 +384,7 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
 
     private void updateClockStyle(boolean animate) {
         if (mClockStyle == 1 || mClockStyle == 2) {
-            animateHide(mClockView, animate, false);
+            animateHide(mClockView, animate);
         } else {
             animateShow(mClockView, animate);
         }
