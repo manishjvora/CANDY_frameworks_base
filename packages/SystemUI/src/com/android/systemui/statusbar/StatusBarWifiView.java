@@ -28,6 +28,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -105,6 +106,7 @@ public class StatusBarWifiView extends FrameLayout  implements DarkReceiver,
         mWifiIcon.setImageTintList(list);
         mIn.setImageTintList(list);
         mOut.setImageTintList(list);
+        mDotView.setDecorColor(color);
     }
 
     @Override
@@ -170,6 +172,8 @@ public class StatusBarWifiView extends FrameLayout  implements DarkReceiver,
 
         mWifiGroup = findViewById(R.id.wifi_group);
         mWifiIcon = findViewById(R.id.wifi_signal);
+        mIn = findViewById(R.id.wifi_in);
+        mOut = findViewById(R.id.wifi_out);
         mSignalSpacer = findViewById(R.id.wifi_signal_spacer);
         mAirplaneSpacer = findViewById(R.id.wifi_airplane_spacer);
         mInoutContainer = findViewById(R.id.inout_container);
@@ -227,6 +231,7 @@ public class StatusBarWifiView extends FrameLayout  implements DarkReceiver,
     }
 
     private void initViewState() {
+        setContentDescription(mState.contentDescription);
         if (mState.resId >= 0) {
             NeutralGoodDrawable drawable = NeutralGoodDrawable.create(
                     mLightContext, mDarkContext, mState.resId);
