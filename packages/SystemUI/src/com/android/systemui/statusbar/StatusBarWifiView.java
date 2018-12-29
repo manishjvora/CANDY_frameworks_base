@@ -53,7 +53,8 @@ public class StatusBarWifiView extends FrameLayout  implements DarkReceiver,
 
     /// Used to show etc dots
     private StatusBarIconView mDotView;
-
+    /// Contains the main icon layout
+    private LinearLayout mWifiGroup;
     private ImageView mWifiIcon;
     private ImageView mIn;
     private ImageView mOut;
@@ -260,10 +261,5 @@ public class StatusBarWifiView extends FrameLayout  implements DarkReceiver,
     @Override
     public String toString() {
         return "StatusBarWifiView(slot=" + mSlot + " state=" + mState + ")";
-    }
-
-    public void updateSettings() {
-        mShowWifiActivity = Settings.System.getIntForUser(getContext().getContentResolver(),
-            Settings.System.STATUSBAR_SHOW_WIFI_ACTIVITY, 1, UserHandle.USER_CURRENT) == 1;
     }
 }
