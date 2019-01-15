@@ -339,9 +339,8 @@ Navigator.OnVerticalChangedListener, KeyguardMonitor.Callback, NotificationMedia
         mNavigationBarView.setResourceMap(mResourceMap);
         mNavigationBarView.setControllers(mPulseController);
         mNavigationBarView.setLeftInLandscape(mLeftInLandscape);
-
-        mNavigationBarView.setDisabledFlags(mDisabledFlags1);
         mNavigationBarView.setComponents(mRecents, mDivider, mStatusBar.getPanel());
+        mNavigationBarView.setDisabledFlags(mDisabledFlags1);
         mNavigationBarView.setOnVerticalChangedListener(this::onVerticalChanged);
         if (isUsingStockNav()) {
             mNavigationBarView.getBaseView().setOnTouchListener(this::onNavigationTouch);
